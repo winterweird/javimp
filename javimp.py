@@ -78,8 +78,6 @@ if __name__ == '__main__':
             page = requests.get("http://docs.oracle.com/javase/7/docs/api/allclasses-frame.html")
             tree = html.fromstring(page.content)
             
-            # I can do "sys.stdout.write(".") and ..." here because the write method returns
-            # the number of characters written, and so it will always be 1, i.e. truthful
             allStdlibClasses = [a.replace(".html", "").replace("/", ".") for a in tree.xpath('//a[@target="classFrame"]/@href')]
             
             sys.stdout.write("\nFetching Android API classes...")
