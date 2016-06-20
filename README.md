@@ -1,4 +1,4 @@
-DEPENDENCY NOTE: This Python script depends on the 3rd party modules `lxml`, `requests` and `pyperclip` for some of its functionality. If you do not have these modules installed with your Python installation, you may still use the program; however, updating the Java class database (lxml/requests) and utilizing the `-c`option (pyperclip) is disabled.
+**DEPENDENCY NOTE:** This Python script depends on the 3rd party modules `lxml`, `requests` and `pyperclip` for some of its functionality. If you do not have these modules installed with your Python installation, you may still use the program; however, updating the Java class database (`lxml`/`requests`) and utilizing the `-c`option (`pyperclip`) is disabled.
 
 This script has been tested and is known to work with Python versions 2.6, 3.3 and 3.4, and it should theoretically work with any Python 2.x/3.x installation with all the required modules installed.
 
