@@ -22,15 +22,15 @@ This Python script iterates over any arguments you give it, searches a database 
 
 ```
 -h: Displays the help message
-    -i: Insert mode; insert the complete import statements directly in one or more .java source file(s)
-        Example: Given a source file containing these lines:
-            import Activity;
-            import Bundle;
-        The script would correctly replace this with:
-            import android.app.Activity;
-            import android.os.Bundle;
-    -c: Clipboard mode; copies the correct import statements to your clipboard (requires pyperclip module)
-    -o: File output; Creates a file in your current working directory which contains the correct import statements
+-i: Insert mode; insert the complete import statements directly in one or more .java source file(s)
+    Example: Given a source file containing these lines:
+        import Activity;
+        import Bundle;
+    The script would correctly replace this with:
+        import android.app.Activity;
+        import android.os.Bundle;
+-c: Clipboard mode; copies the correct import statements to your clipboard (requires pyperclip module)
+-o: File output; Creates a file in your current working directory which contains the correct import statements
 ```
 
 ### NOTE:
