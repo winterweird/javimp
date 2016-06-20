@@ -35,11 +35,11 @@ OPTIONS:
     -i: Insert mode; insert the complete import statements directly in one or
         more .java source file(s)
         Example: Given a source file containing these lines:
-          import Activity;
-          import Bundle;
-        ... the script would correctly replace this with:
-          import android.app.Activity;
-          import android.os.Bundle;
+            import Activity;
+            import Bundle;
+        The script would correctly replace this with:
+            import android.app.Activity;
+            import android.os.Bundle;
     -c: Clipboard mode; copies the correct import statements to your clipboard
         (not yet implemented)
     -o: File output; Creates a file in your current working directory which
