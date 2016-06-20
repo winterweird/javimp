@@ -72,20 +72,23 @@ if __name__ == '__main__':
             print("Updating list of classes. This may take a little while...")
             
             # backwards compatible way of not printing a newline at the end
-            sys.stdout.write("Fetching Java standard library classes")
+            sys.stdout.write("Fetching Java standard library classes...")
+            sys.stdout.flush()
             
             page = requests.get("http://docs.oracle.com/javase/7/docs/api/allclasses-frame.html")
             tree = html.fromstring(page.content)
             
             # I can do "sys.stdout.write(".") and ..." here because the write method returns
             # the number of characters written, and so it will always be 1, i.e. truthful
-            allStdlibClasses = [sys.stdout.write(".") and a.replace(".html", "").replace("/", ".") for a in tree.xpath('//a[@target="classFrame"]/@href')]
+            allStdlibClasses = [a.replace(".html", "").replace("/", ".") for a in tree.xpath('//a[@target="classFrame"]/@href')]
+            
+            sys.stdout.write("\nFetching Android API classes...")
+            sys.stdout.flush()
             
             page = requests.get("https://developer.android.com/reference/classes.html")
             tree = html.fromstring(page.content)
             
-            sys.stdout.write("\nFetching Android API classes")
-            allAndroidClasses = [sys.stdout.write(".") and a.replace("https://developer.android.com/reference/", "").replace(".html", "").replace("/", ".") for a in tree.xpath('//td[@class="jd-linkcol"]/a/@href')]
+            allAndroidClasses = [a.replace("https://developer.android.com/reference/", "").replace(".html", "").replace("/", ".") for a in tree.xpath('//td[@class="jd-linkcol"]/a/@href')]
             allClasses = set(allStdlibClasses+allAndroidClasses)
             
             with open(os.path.join(FILELOCATION, "java_classes.list"), "w") as classlist:
