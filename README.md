@@ -4,7 +4,7 @@ This script has been tested and is known to work with Python versions 2.6, 3.3 a
 
 # javimp.py: Java Importer
 
-A python script which turns incomplete Java `import` statements (e.g. `import ArrayList;`) into complete ones.
+A Python script which turns incomplete Java `import` statements (e.g. `import ArrayList;`) into complete ones.
 
 > B-but why?
 
@@ -12,7 +12,7 @@ I'm sick and tired of manually finding where all the things I'm using are locate
 
 ### DESCRIPTION:
 
-This python script iterates over any arguments you give it, searches a database of class names for a class that matches the argument, and prints out the full `import` statement including the package. Any already complete `import` statements or `import` statements with packages that cannot be found are left alone. If you run it without any arguments, it uses web scraping to update its database of Java classes.
+This Python script iterates over any arguments you give it, searches a database of class names for a class that matches the argument, and prints out the full `import` statement including the package. Any already complete `import` statements or `import` statements with packages that cannot be found are left alone. If you run it without any arguments, it uses web scraping to update its database of Java classes.
 
 ### USAGE:
 
