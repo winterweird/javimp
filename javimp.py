@@ -21,22 +21,24 @@ except ImportError:
 
 HELP_MESSAGE_STRING = """
 DESCRIPTION:
-This python script iterates over any arguments you give it, searches a database
-of class names for a class that matches the argument, and prints out the full
-import statement including the package. Any already complete import statements
-or import statements with packages that cannot be found are left alone. If you
-run it without any arguments, it uses web scraping to update its database of
-Java classes.
+This python script tries to match the arguments you give it to classes in a
+database, and prints out the results it finds. You can update the list of
+classes through web scraping by running the program with no arguments.
 
-USAGE: python %s [option] [args]
+USAGE:
+python %s [options] [args]
+or
+python %s [args] [options]
+or
+python %s [args] [options] [more args]
+
+Please take note that aside from -a mode, only one mode can be in effect
+at the time. Precedence is -i > -o > -c > None
 
 OPTIONS:
     -h: Displays this help message
     -a: Show all mode; use in combination with any other option to add any
-        additional matches of a class to the next line, commented out. Must
-        be the first option.
-        Example: "-a -i MyJavaFile.java" is allowed; "-i -a MyJavaFile.java"
-        is likely to create problems.
+        additional matches of a class as a commented import
     -i: Insert mode; insert the complete import statements directly in one or
         more .java source file(s)
         Example: Given a source file containing these lines:
