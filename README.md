@@ -12,16 +12,24 @@ I'm sick and tired of manually finding where all the things I'm using are locate
 
 ### DESCRIPTION:
 
-This Python script iterates over any arguments you give it, searches a database of class names for a class that matches the argument, and prints out the full `import` statement including the package. Any already complete `import` statements or `import` statements with packages that cannot be found are left alone. If you run it without any arguments, it uses web scraping to update its database of Java classes.
+This python script tries to match the arguments you give it to classes in a database, and prints out the results it finds. You can update the list of classes through web scraping by running the program with no arguments.
 
 ### USAGE:
 
-`python javimp.py [option] [args]`
+`python javimp.py [options] [args]`
+or
+`python javimp.py [args] [options]`
+or
+`python javimp.py [args] [options] [more args]`
+or whatever.
+
+Please take note that aside from -a mode, only one mode can be in effect at the time. Precedence is -i > -o > -c > None
 
 ### OPTIONS:
 
 ```
 -h: Displays the help message
+-a: Show all mode; use in combination with any other option to add any additional matches of a class as a commented import
 -i: Insert mode; insert the complete import statements directly in one or more .java source file(s)
     Example: Given a source file containing these lines:
         import Activity;
