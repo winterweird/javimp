@@ -11,40 +11,41 @@
 @echo %PY% %PROGRAMNAME% %T1%
 @echo.
 @echo OUTPUT:
-@%PY% %PROGRAMNAME% %T1%
+@%PY% %PROGRAMNAME% %T1% 2>nul
 @echo.
 @echo.
 @echo TESTING MULTIPLE ARGUMENTS FROM STANDARD LIBRARY
 @echo %PY% %PROGRAMNAME% %T2%
 @echo.
 @echo OUTPUT:
-@%PY% %PROGRAMNAME% %T2%
+@%PY% %PROGRAMNAME% %T2% 2>nul
 @echo.
 @echo.
 @echo TESTING OUTPUT FOR ANDROID API
 @echo %PY% %PROGRAMNAME% %T3%
 @echo.
 @echo OUTPUT:
-@%PY% %PROGRAMNAME% %T3%
+@%PY% %PROGRAMNAME% %T3% 2>nul
 @echo.
 @echo.
 @echo TESTING -a OPTION
 @echo %PY% %PROGRAMNAME% -a %T3%
 @echo.
 @echo OUTPUT:
-@%PY% %PROGRAMNAME% -a %T3%
+@%PY% %PROGRAMNAME% -a %T3% 2>nul
 @echo.
 @echo.
 @echo TESTING -c OPTION
 @echo If successful, you should check the content of your clipboard afterwards
-@%PY% %PROGRAMNAME% -c %T2%
+@echo.
+@%PY% %PROGRAMNAME% -c %T2% 2>nul
 @echo.
 @echo.
 @echo TESTING -o OPTION
 @echo %PY% %PROGRAMNAME% -o %T3%
 @echo.
 @echo CONTENT AFTER:
-@%PY% %PROGRAMNAME% -o %T3%
+@%PY% %PROGRAMNAME% -o %T3% 2>nul
 @type import_statements.txt
 @del import_statements.txt
 @echo.
@@ -57,7 +58,7 @@
 @echo.
 @echo.
 @echo CONTENT AFTER:
-@%PY% %PROGRAMNAME% -i %TESTFILE%
+@%PY% %PROGRAMNAME% -i %TESTFILE% 2>nul
 @type %TESTFILE%
 @copy /Y %TESTFILEBACKUP% %TESTFILE% >nul
 @echo.
@@ -68,7 +69,7 @@
 @echo %PY% %PROGRAMNAME% -a -o %T3%
 @echo.
 @echo CONTENT AFTER:
-@%PY% %PROGRAMNAME% -a -o %T3%
+@%PY% %PROGRAMNAME% -a -o %T3% 2>nul
 @type import_statements.txt
 @del import_statements.txt
 @echo.
@@ -80,7 +81,7 @@
 @echo.
 @echo.
 @echo CONTENT AFTER:
-@%PY% %PROGRAMNAME% -a -i %TESTFILE%
+@%PY% %PROGRAMNAME% -a -i %TESTFILE% 2>nul
 @type %TESTFILE%
 @copy /Y %TESTFILEBACKUP% %TESTFILE% >nul
 @echo.
