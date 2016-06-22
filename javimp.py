@@ -32,6 +32,11 @@ USAGE: python %s [option] [args]
 
 OPTIONS:
     -h: Displays this help message
+    -a: Show all mode; use in combination with any other option to add any
+        additional matches of a class to the next line, commented out. Must
+        be the first option.
+        Example: "-a -i MyJavaFile.java" is allowed; "-i -a MyJavaFile.java"
+        is likely to create problems.
     -i: Insert mode; insert the complete import statements directly in one or
         more .java source file(s)
         Example: Given a source file containing these lines:
@@ -41,7 +46,6 @@ OPTIONS:
             import android.app.Activity;
             import android.os.Bundle;
     -c: Clipboard mode; copies the correct import statements to your clipboard
-        (not yet implemented)
     -o: File output; Creates a file in your current working directory which
         contains the correct import statements
 
@@ -64,6 +68,16 @@ if __name__ == '__main__':
     if (MISSING_3RD_PARTY_MODULES):
         print("Warning - 3rd party modules missing: " + ", ".join(MISSING_3RD_PARTY_MODULES))
         print("Some of this program's functionality will not be available.\n")
+    
+    includeAllMatches = "-a" in sys.argv
+    mode = "i" if "-i" in sys.argv else "o" if "-o" in sys.argv else "c" if "-c" in sys.argv else None
+    
+    if mode == "c":
+        if "pyperclip" in MISSING_3RD_PARTY_MODULES:
+            print("Error - missing modules: pyperclip")
+            sys.exit()
+    
+    pyperclip_str = "" # needed to accumulate string to paste to clipboard
     
     if len(sys.argv) == 1:
         # only python script supplied
@@ -97,64 +111,83 @@ if __name__ == '__main__':
         else:
             print("Error - missing modules: " + ("lxml and requests" if "requests" in MISSING_3RD_PARTY_MODULES else "lxml") if "lxml" in MISSING_3RD_PARTY_MODULES else "requests")
     else:
-        for i in range(len(sys.argv)):
-            if sys.argv[i] == "-i":
-                # insert mode; insert directly in java files specified
-                # by the following arguments
-                for line in fileinput.input(files=sys.argv[i+1:], inplace=True):
-                    # fileinput is kinda strange, but it works
-                    # For reference, here's what happens:
-                    # 1) The original files are moved to backup files
-                    # 2) The standard output is redirected to the original files
-                    #    within the loop
-                    # 3) Thus any calls to print write back to the original files
+        for i in range(1, len(sys.argv)):
+            if sys.argv[i].startswith("-"):
+                # option, we don't wanna deal with this
+                continue
+            found = False # used if includeAllMatches
+            if mode == "i":
+                # insert mode is special, so we handle it separately
+                for line in fileinput.input(sys.argv[i], inplace=True):
+                    # A NOTE ON FILEINPUT:
                     #
-                    # Thanks to http://stackoverflow.com/a/290494 for the tip
+                    # With the inplace option set to True, fileinput backs up
+                    # the file, and sets sys.stdout to the original file for the
+                    # duration of the loop. Any calls to sys.stdout.write or
+                    # print will therefore be written on top of the original
+                    # file.
                     
+                    found = False
                     if line.startswith("import"):
                         with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
                             for c in classlist:
-                                if c.rstrip().endswith("." + re.sub("import |;", "", line.rstrip())):
-                                    print("import %s;" %c.rstrip())
-                                    break
-                            else:
-                                # the loop was unbroken; default to the original line
-                                print(line.rstrip("\n"))
-                    else:
-                        # not an import line; let's keep it
-                        print(line.rstrip("\n"))
-                break # because we just looped over everything
-            elif sys.argv[i] == "-o":
-                # output mode; output import statements to file in cwd
-                with open("import_statements.txt", "a") as o:
-                    # loop over the rest of the args
-                    for cti in sys.argv[i+1:]:
-                        with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
-                            for c in classlist:
-                                if c.rstrip().endswith(".%s" %cti):
-                                    o.write("import %s;\n" %c.rstrip())
-                                    break
-                print("Output at ./import_statements.txt")
-                break # because we just looped over everything
-            elif sys.argv[i] == "-c":
-                # clipboard mode; paste import statements to clipboard
-                if "pyperclip" not in MISSING_3RD_PARTY_MODULES:
-                    import_str = ""
-                    for cti in sys.argv[i+1:]:
-                        with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
-                            for c in classlist:
-                                if c.rstrip().endswith(".%s" %cti):
-                                    import_str += "import %s;%s" %(c.rstrip(), os.linesep)
-                                    break
-                    pyperclip.copy(import_str)
-                    break # same as above
-                else:
-                    print("Error - missing modules: pyperclip")
-                    sys.exit()
+                                if c.rstrip().endswith(".%s" %re.sub("import |;", "", line.rstrip())):
+                                    if found:
+                                        # multiple matches; add new matches as comments just in case
+                                        # note how found is set to True AFTER this, so if this is the
+                                        # first class found, it will still be False from earlier
+                                        sys.stdout.write("//")
+                                    
+                                    sys.stdout.write("import %s;\n" %c.rstrip())
+                                    found = True
+                                    if not includeAllMatches:
+                                        break # fuck it, let's just hope it's the right one
+                    if not found:
+                        # 1) There was no match for the attempted import
+                        # 2) The line didn't start with import, so we jumped straight here
+                        # In either case, insert the line as it was
+                        sys.stdout.write(line)
             else:
-                # regular mode; output to stdout
+                # the class we're trying to find is passed directly as sys.argv[i]
+                import_str = ""
                 with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
                     for c in classlist:
-                        if c.rstrip().endswith("." + re.sub("import |;", "", sys.argv[i])):
-                            print("import %s;" %c.rstrip())
-                            break
+                        if c.rstrip().endswith(".%s" %sys.argv[i]):
+                            if found:
+                                # already found, comment out subsequent matches
+                                import_str += "//"
+                            # we need to use os.linesep here instead of \n because of
+                            # clipboard support
+                            import_str += "import %s;%s" %(c.rstrip(), os.linesep)
+                            found = True
+                            if not includeAllMatches:
+                                break
+                
+                # So import_str now holds a single complete import statement[1]
+                # corresponding to the class specified in sys.argv[i], or is
+                # empty if no match was found[2]. All we need to figure out is
+                # how to output it.
+                #
+                # 1: ... plus an unknown number of subsequent import statements
+                #    that are commented out.
+                # 2: Or if the specified class to import already had the full
+                #    package specified.
+                
+                if mode == "o":
+                    # output to file
+                    with open("import_statements.txt", "a") as o:
+                        o.write(import_str)
+                elif mode == "c":
+                    # we still need to iterate over all the other classes so we can
+                    # copy it all to the clipboard in one go
+                    pyperclip_str += import_str
+                else:
+                    # write to stdout
+                    sys.stdout.write(import_str)
+        
+        if pyperclip_str:
+            # if not -c mode, this was never written to, so it's False
+            # if else, it's either empty because there were no matches,
+            # or it contains all the imports, and we can copy them to
+            # the clipboard
+            pyperclip.copy(pyperclip_str)
