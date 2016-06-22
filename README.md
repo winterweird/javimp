@@ -28,7 +28,7 @@ or
 
 or whatever.
 
-Please take note that aside from -a mode, only one mode can be in effect at the time. Precedence is -i > -o > -c > None
+Please take note that aside from `-a` mode, only one mode can be in effect at the time. Precedence is `-i` > `-o` > `-c` > `None`
 
 ### OPTIONS:
 
