@@ -17,10 +17,15 @@ This python script tries to match the arguments you give it to classes in a data
 ### USAGE:
 
 `python javimp.py [options] [args]`
+
 or
+
 `python javimp.py [args] [options]`
+
 or
+
 `python javimp.py [args] [options] [more args]`
+
 or whatever.
 
 Please take note that aside from -a mode, only one mode can be in effect at the time. Precedence is -i > -o > -c > None
@@ -29,7 +34,8 @@ Please take note that aside from -a mode, only one mode can be in effect at the 
 
 ```
 -h: Displays the help message
--a: Show all mode; use in combination with any other option to add any additional matches of a class as a commented import
+-a: Show all mode; use in combination with any other option to add any additional matches of a class
+    as a commented import
 -i: Insert mode; insert the complete import statements directly in one or more .java source file(s)
     Example: Given a source file containing these lines:
         import Activity;
