@@ -66,8 +66,8 @@ if __name__ == '__main__':
         print(HELP_MESSAGE_STRING)
         sys.exit()
     if (MISSING_3RD_PARTY_MODULES):
-        print("Warning - 3rd party modules missing: " + ", ".join(MISSING_3RD_PARTY_MODULES))
-        print("Some of this program's functionality will not be available.\n")
+        sys.stderr.write("Warning - 3rd party modules missing: " + ", ".join(MISSING_3RD_PARTY_MODULES) + "\n")
+        sys.stderr.write("Some of this program's functionality will not be available.\n\n")
     
     includeAllMatches = "-a" in sys.argv
     mode = "i" if "-i" in sys.argv else "o" if "-o" in sys.argv else "c" if "-c" in sys.argv else None
