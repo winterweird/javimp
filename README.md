@@ -12,7 +12,7 @@ I'm sick and tired of manually finding where all the things I'm using are locate
 
 ### DESCRIPTION:
 
-This python script tries to match the arguments you give it to classes in a database, and prints out the results it finds. You can update the list of classes through web scraping by running the program with no arguments.
+This python script goes through the files passed as arguments and matches classes you attempt to import to classes in a database, and prints out the results it finds. You can update the list of classes through web scraping by running the program with no arguments.
 
 ### USAGE:
 
