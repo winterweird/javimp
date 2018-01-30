@@ -151,20 +151,23 @@ if __name__ == '__main__':
                         # In either case, insert the line as it was
                         sys.stdout.write(line)
             else:
-                # the class we're trying to find is passed directly as sys.argv[i]
                 import_str = ""
-                with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
-                    for c in classlist:
-                        if c.rstrip().endswith(".%s" %sys.argv[i]):
-                            if found:
-                                # already found, comment out subsequent matches
-                                import_str += "//"
-                            # we need to use os.linesep here instead of \n because of
-                            # clipboard support
-                            import_str += "import %s;%s" %(c.rstrip(), os.linesep)
-                            found = True
-                            if not includeAllMatches:
-                                break
+                with open(sys.argv[i], "r") as f:
+                    for line in f:
+                        if line.startswith("import"):
+                            found = False
+                            with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
+                                for c in classlist:
+                                    if c.rstrip().endswith(".%s" %re.sub("import |;", "", line.rstrip())):
+                                        if found:
+                                            # already found, comment out subsequent matches
+                                            import_str += "//"
+                                        # we need to use os.linesep here instead of \n because of
+                                        # clipboard support
+                                        import_str += "import %s;%s" %(c.rstrip(), os.linesep)
+                                        found = True
+                                        if not includeAllMatches:
+                                            break
                 
                 # So import_str now holds a single complete import statement[1]
                 # corresponding to the class specified in sys.argv[i], or is
