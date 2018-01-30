@@ -58,7 +58,7 @@ for your purposes. This software comes with no warranty or guarantee. Use at
 own risk.
 
 Sincerely, Butterbeard Studios.
-""" %sys.argv[0]
+""" %(sys.argv[0],sys.argv[0],sys.argv[0])
 
 FILELOCATION = os.path.dirname(os.path.abspath(__file__))
 
