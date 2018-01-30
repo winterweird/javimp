@@ -129,7 +129,6 @@ if __name__ == '__main__':
                     # duration of the loop. Any calls to sys.stdout.write or
                     # print will therefore be written on top of the original
                     # file.
-                    
                     found = False
                     if line.startswith("import"):
                         with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
@@ -154,6 +153,8 @@ if __name__ == '__main__':
                 import_str = ""
                 with open(sys.argv[i], "r") as f:
                     for line in f:
+                        if line.startswith(" "):
+                            break
                         if line.startswith("import"):
                             found = False
                             with open(os.path.join(FILELOCATION, "java_classes.list"), "r") as classlist:
