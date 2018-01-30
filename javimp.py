@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # javimp.py
 
 # find probable java import statements for a given list of
